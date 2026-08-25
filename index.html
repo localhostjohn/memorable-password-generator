@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A private, browser-based memorable password generator.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Memorable Password Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1>Memorable Password Generator</h1>
+      <p>Creates an easy-to-remember password using one consistent format: adjective + noun + number + special character.</p>
+    </header>
+
+    <section class="generator" aria-labelledby="password-label">
+      <label class="label" id="password-label" for="password">Generated password</label>
+      <div class="password-row">
+        <input
+          id="password"
+          class="password"
+          type="text"
+          readonly
+          spellcheck="false"
+          autocomplete="off"
+          aria-describedby="copy-status"
+        >
+        <button id="copy" class="copy" type="button">Copy password</button>
+      </div>
+      <div id="copy-status" class="copy-status" role="status" aria-live="polite"></div>
+      <button id="generate" class="generate" type="button">Generate new password</button>
+    </section>
+
+    <section class="policy" aria-labelledby="policy-heading">
+      <h2 id="policy-heading">Password policy</h2>
+      <div class="checks">
+        <div class="check" id="check-length"><span class="check-icon">×</span><span class="check-text">Minimum 12 characters</span></div>
+        <div class="check" id="check-uppercase"><span class="check-icon">×</span><span class="check-text">Contains a capital letter</span></div>
+        <div class="check" id="check-lowercase"><span class="check-icon">×</span><span class="check-text">Contains a lowercase letter</span></div>
+        <div class="check" id="check-number"><span class="check-icon">×</span><span class="check-text">Contains a number</span></div>
+        <div class="check" id="check-special"><span class="check-icon">×</span><span class="check-text">Contains a special character</span></div>
+      </div>
+    </section>
+
+    <p class="meta" id="combination-count"></p>
+
+    <footer class="privacy">
+      <strong>Private by design.</strong> Passwords are generated locally in your browser using the Web Crypto API. The app makes no network requests, stores no generated passwords and uses no analytics.
+    </footer>
+  </main>
+
+  <script src="js/words.js"></script>
+  <script src="js/generator.js"></script>
+</body>
+</html>
