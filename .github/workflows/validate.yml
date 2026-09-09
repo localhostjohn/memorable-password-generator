@@ -1,0 +1,24 @@
+name: Validate static site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/words.js
+          node --check js/generator.js
+      - name: Check required site files
+        run: test -s index.html && test -s css/style.css && test -s favicon.png

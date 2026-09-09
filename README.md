@@ -1,48 +1,42 @@
 # Memorable Password Generator
 
-A lightweight browser-based password generator that creates easy-to-remember passwords using one consistent format:
+A lightweight browser-based generator for memorable temporary and permanent passwords. Passwords are generated locally using the browser Web Crypto API.
 
-`Adjective + Noun + Number + Special Character`
+## Use the generator
 
-Example:
+[Open the live generator](https://localhostjohn.github.io/memorable-password-generator/), or open `index.html` locally in a modern browser such as Microsoft Edge or Google Chrome.
 
-`SilverFalcon42!`
+## Password profiles
 
-## Password policy
+- **Temporary:** one adjective, two nouns, a three-digit number and a symbol. The password must be changed after first sign-in.
+- **Permanent:** one adjective, five nouns, a three-digit number and a symbol. This deliberately uses a much larger search space.
 
-Every generated password is checked for:
+Both profiles enforce a minimum length and include uppercase, lowercase, numeric and special characters. Always confirm that the generated password meets the target system's current policy.
 
-- Minimum 12 characters
-- At least one uppercase letter
-- At least one lowercase letter
-- At least one number
-- At least one special character
+## Appropriate use
+
+- Use the correct profile for the intended account.
+- Do not reuse generated passwords across accounts.
+- Do not place passwords in tickets, email, chat messages, source code or documentation.
+- Follow the organisation's approved identity-verification, password-reset and secure-delivery processes.
+- Prefer phishing-resistant MFA and organisation-approved password managers wherever available.
+
+This project provides a generation aid, not an organisational security approval or a replacement for password policy, MFA, rate limiting, compromised-password screening or secure credential delivery.
 
 ## Privacy and security
 
 - Generation happens entirely in the browser.
-- Random selections use the browser Web Crypto API (`crypto.getRandomValues`).
-- No generated passwords are logged or stored.
-- No analytics are included.
-- No API calls or external word services are used.
+- Random selections use `crypto.getRandomValues()` with rejection sampling.
+- The application does not log or store generated passwords.
+- No analytics, API calls or external word services are used.
 - The Content Security Policy blocks outbound network connections from the page.
+- A copied password may remain in the operating system clipboard until it is replaced.
 
-## Vocabulary
+The word bank and generation algorithm are public. Security therefore comes from the randomly selected combinations—not from keeping the pattern secret.
 
-This version includes:
+## Development
 
-- 283 curated adjectives
-- 899 curated nouns
-- 90 two-digit number values
-- 8 special characters
-
-That gives **183,180,240 base combinations** before the minimum-length validation rerolls any combination that is too short.
-
-The word bank lives in `js/words.js`, so it can be expanded without changing the generator logic.
-
-## Run locally
-
-Open `index.html` in a modern browser such as Microsoft Edge or Google Chrome.
+No build process or dependencies are required. Clone the repository and open `index.html`. The validation workflow checks JavaScript syntax and required static files on pull requests and pushes to `main`.
 
 ## Publish with GitHub Pages
 
@@ -51,22 +45,25 @@ Open `index.html` in a modern browser such as Microsoft Edge or Google Chrome.
 3. Select the `main` branch and `/ (root)`.
 4. Save.
 
-GitHub Pages will then publish the app as a static website.
-
 ## Project structure
 
 ```text
 memorable-password-generator/
+├── .github/workflows/validate.yml
+├── css/style.css
+├── js/generator.js
+├── js/words.js
+├── favicon.png
+├── favicon.svg
 ├── index.html
-├── README.md
 ├── LICENSE
-├── css/
-│   └── style.css
-└── js/
-    ├── generator.js
-    └── words.js
+└── README.md
 ```
 
-## Note
+## Public repository guidance
 
-This project describes a generic password complexity policy. Do not add confidential organisational information, real passwords, internal server names, user details or proprietary branding to a public repository without approval.
+Do not add confidential organisational information, real passwords, internal server names, user details or proprietary branding to this public repository.
+
+## Licence
+
+Licensed under the MIT License.

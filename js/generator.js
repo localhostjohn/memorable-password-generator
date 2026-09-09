@@ -7,6 +7,7 @@
   const copyButton = document.getElementById("copy");
   const copyStatus = document.getElementById("copy-status");
   const combinationCount = document.getElementById("combination-count");
+  const profileInputs = document.querySelectorAll('input[name="profile"]');
 
   const checks = {
     length: document.getElementById("check-length"),
@@ -15,6 +16,11 @@
     number: document.getElementById("check-number"),
     special: document.getElementById("check-special")
   };
+
+  const profiles = Object.freeze({
+    temporary: Object.freeze({ nounCount: 2, minimumLength: 15, label: "Temporary" }),
+    permanent: Object.freeze({ nounCount: 5, minimumLength: 20, label: "Permanent" })
+  });
 
   const recentPasswords = [];
   const RECENT_LIMIT = 100;
@@ -39,8 +45,12 @@
     return items[secureRandomInt(items.length)];
   }
 
-  function isPolicyCompliant(password) {
-    return password.length >= 12 &&
+  function selectedProfileName() {
+    return document.querySelector('input[name="profile"]:checked').value;
+  }
+
+  function isPolicyCompliant(password, minimumLength) {
+    return password.length >= minimumLength &&
       /[A-Z]/.test(password) &&
       /[a-z]/.test(password) &&
       /\d/.test(password) &&
@@ -48,21 +58,20 @@
   }
 
   function buildPassword() {
-    for (let attempt = 0; attempt < 1000; attempt += 1) {
-      const adjective = pick(bank.adjectives);
-      const noun = pick(bank.nouns);
-      const number = secureRandomInt(90) + 10;
-      const special = pick(bank.specials);
-      const candidate = `${adjective}${noun}${number}${special}`;
+    const profile = profiles[selectedProfileName()];
 
-      if (
-        isPolicyCompliant(candidate) &&
-        !recentPasswords.includes(candidate)
-      ) {
+    for (let attempt = 0; attempt < 1000; attempt += 1) {
+      const words = [pick(bank.adjectives)];
+      for (let index = 0; index < profile.nounCount; index += 1) {
+        words.push(pick(bank.nouns));
+      }
+
+      const number = secureRandomInt(900) + 100;
+      const candidate = `${words.join("")}${number}${pick(bank.specials)}`;
+
+      if (isPolicyCompliant(candidate, profile.minimumLength) && !recentPasswords.includes(candidate)) {
         recentPasswords.push(candidate);
-        if (recentPasswords.length > RECENT_LIMIT) {
-          recentPasswords.shift();
-        }
+        if (recentPasswords.length > RECENT_LIMIT) recentPasswords.shift();
         return candidate;
       }
     }
@@ -78,24 +87,36 @@
   }
 
   function updatePolicy(password) {
-    setCheck(
-      checks.length,
-      password.length >= 12,
-      `${password.length} characters (minimum 12)`
-    );
+    const minimumLength = profiles[selectedProfileName()].minimumLength;
+    setCheck(checks.length, password.length >= minimumLength, `${password.length} characters (minimum ${minimumLength})`);
     setCheck(checks.uppercase, /[A-Z]/.test(password), "Contains a capital letter");
     setCheck(checks.lowercase, /[a-z]/.test(password), "Contains a lowercase letter");
     setCheck(checks.number, /\d/.test(password), "Contains a number");
     setCheck(checks.special, /[^A-Za-z0-9]/.test(password), "Contains a special character");
   }
 
+  function formatCombinations() {
+    const profile = profiles[selectedProfileName()];
+    const count = BigInt(bank.adjectives.length) *
+      (BigInt(bank.nouns.length) ** BigInt(profile.nounCount)) *
+      900n * BigInt(bank.specials.length);
+    const totalWords = profile.nounCount + 1;
+
+    combinationCount.textContent = `${profile.label} profile · ${totalWords} words + three-digit number + symbol · ${count.toLocaleString()} possible combinations`;
+  }
+
   function generate() {
     copyStatus.textContent = "";
-    const password = buildPassword();
-    passwordOutput.value = password;
-    updatePolicy(password);
-    passwordOutput.focus();
-    passwordOutput.select();
+    try {
+      const password = buildPassword();
+      passwordOutput.value = password;
+      updatePolicy(password);
+      formatCombinations();
+      passwordOutput.focus();
+      passwordOutput.select();
+    } catch {
+      copyStatus.textContent = "A password could not be generated. Refresh the page and try again.";
+    }
   }
 
   async function copyPassword() {
@@ -112,34 +133,13 @@
       copyStatus.textContent = copied ? "Copied to clipboard" : "Select the password and copy it manually";
     }
 
-    window.setTimeout(() => {
-      copyStatus.textContent = "";
-    }, 2500);
-  }
-
-  function formatCombinations() {
-    const count =
-      BigInt(bank.adjectives.length) *
-      BigInt(bank.nouns.length) *
-      90n *
-      BigInt(bank.specials.length);
-
-    combinationCount.textContent =
-      `${bank.adjectives.length.toLocaleString()} adjectives × ` +
-      `${bank.nouns.length.toLocaleString()} nouns · ` +
-      `${count.toLocaleString()} possible combinations`;
+    window.setTimeout(() => { copyStatus.textContent = ""; }, 2500);
   }
 
   generateButton.addEventListener("click", generate);
   copyButton.addEventListener("click", copyPassword);
-
   passwordOutput.addEventListener("click", () => passwordOutput.select());
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.ctrlKey && !event.metaKey) {
-      generate();
-    }
-  });
+  profileInputs.forEach((input) => input.addEventListener("change", generate));
 
   formatCombinations();
   generate();
