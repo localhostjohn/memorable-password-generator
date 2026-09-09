@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Memorable Password Generator</title>
+  <rect width="64" height="64" rx="13" fill="#2563c9"/>
+  <g fill="#fff" transform="rotate(-45 32 32)">
+    <path fill-rule="evenodd" d="M22 8a14 14 0 0 1 7 26.1V48h7v8h-7v4h-14V34.1A14 14 0 0 1 22 8Zm0 8a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/>
+  </g>
+</svg>
