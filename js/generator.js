@@ -18,7 +18,7 @@
   };
 
   const profiles = Object.freeze({
-    temporary: Object.freeze({ nounCount: 2, minimumLength: 15, label: "Temporary" }),
+    temporary: Object.freeze({ nounCount: 1, minimumLength: 15, label: "Temporary" }),
     permanent: Object.freeze({ nounCount: 5, minimumLength: 20, label: "Permanent" })
   });
 
