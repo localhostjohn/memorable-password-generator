@@ -8,7 +8,7 @@ A lightweight browser-based generator for memorable temporary and permanent pass
 
 ## Password profiles
 
-- **Temporary:** one adjective, two nouns, a three-digit number and a symbol. The password must be changed after first sign-in.
+- **Temporary:** one adjective, one noun, a three-digit number and a symbol. The password must be changed after first sign-in.
 - **Permanent:** one adjective, five nouns, a three-digit number and a symbol. This deliberately uses a much larger search space.
 
 Both profiles enforce a minimum length and include uppercase, lowercase, numeric and special characters. Always confirm that the generated password meets the target system's current policy.
