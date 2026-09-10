@@ -1,0 +1,52 @@
+
+.profile-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+}
+
+.profile-picker legend {
+  margin-bottom: 8px;
+  font-weight: 650;
+}
+
+.profile-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  cursor: pointer;
+}
+
+.profile-option:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(32, 103, 209, 0.12);
+}
+
+.profile-option input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.profile-option span,
+.profile-option small {
+  display: block;
+}
+
+.profile-option small {
+  margin-top: 3px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+@media (max-width: 560px) {
+  .profile-picker {
+    grid-template-columns: 1fr;
+  }
+}
